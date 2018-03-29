@@ -1,0 +1,94 @@
+$(document).ready(function(){
+var loadScrollbar = false;
+
+  web3.version.getNetwork((err, netId) => {
+    if (netId != "1") {
+      $(".warnings").show();
+      $("#networkWarning").show();
+    }
+  });
+  if (web3.eth.accounts.length == 0) {
+    $(".warnings").show();
+    $("#noWeb3AccountWarning").show();
+  }
+
+  var vueInstance = new Vue({
+    el:'#mainVue',
+    data:{
+      events: []
+    },
+    updated: function() {
+      $('[data-toggle="popover"]')
+        .on('click',function(e){
+          e.preventDefault();
+          return true;
+        })
+        .popover();
+    }
+  });
+
+
+
+  resize();
+  $(window).resize(resize());
+  function resize(){
+    if (!window.matchMedia("(max-width: 700px)").matches) {
+      //main scrollbars
+      $('body').mCustomScrollbar({
+        scrollButtons: {
+          enable:true
+        },
+        theme:"inset-dark",
+        scrollInertia:150,
+        autoHideScrollbar:false
+      });
+    }
+  }
+
+
+  window.addEventListener("contracts_loaded", () =>{
+    //user info
+    var userAddress = web3.eth.accounts[0];
+    var userBalance;
+    web3.eth.getBalance(web3.eth.accounts[0], (err, res) =>{
+      userBalance = web3.fromWei(res.toNumber(), 'ether');
+      $('#userAddress').text(userAddress);
+      $('#userBalance').text(userBalance);
+    });
+
+    ///fetching the events
+    var eventPromiseArray =[];
+    for(var i=0; i<window.loadedContracts.length; i++){
+      var eventPromise = new Promise((resolve, reject)=>{
+        loadedContracts[i].getAllEvents().then((events) =>{
+          events.forEach((element)=> {
+          vueInstance.events.push(element);
+          });
+          resolve();
+        });
+      });
+      eventPromiseArray.push(eventPromise);
+    }
+    Promise.all(eventPromiseArray).then(function() {
+      //once all events are loaded we can sort the events by timestamp
+      //and load the scrollbar
+      vueInstance.events.sort((a, b) => {
+        return a.timestamp - b.timestamp;
+      });
+      loadEventsScrollbar();
+    });
+  });
+});
+
+//scrollbar for the events is loaded once all events are loaded
+function loadEventsScrollbar() {
+  //scrollbar
+  $('.scrollBar').mCustomScrollbar({
+    scrollButtons: {
+      enable:true
+    },
+    theme:"inset-dark",
+    scrollInertia:150,
+    autoHideScrollbar:true,
+  });
+}

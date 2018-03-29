@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Basic Dapp template</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./css/index.css">
+    <link rel="stylesheet" href="./css/jquery.mCustomScrollbar.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+    <script src="https://unpkg.com/vue"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="./libs/jquery.mCustomScrollbar.concat.min.js"></script>
+    <script src="./libs/humanize-duration.js"></script>
+    <script src="./libs/xss-filters.min.js"></script>
+    <script src="./libs/moment.min.js"></script>
+    <script src="./js/components.js"></script>
+    <script src="./js/web3_contractsLoader.js"></script>
+    <script src="./js/index.js"></script>
+  </head>
+
+  <body>
+    <div class="container-fluid site-main">
+        <div class ="warnings" hidden='true' >
+            <div id="noWeb3AccountWarning" hidden='true' align='center' class = "row">
+              <div class="alert alert-danger col-md-offset-3 col-md-6" style='display:inline-block;'>
+                <p><strong>No Ethereum account found.</strong></p>
+                <p>You are currently unable to initiate any commands. Make sure Metamask is installed and unlocked, and refresh.</p>
+              </div>
+            </div>
+            <div id="networkWarning" hidden='true' align='center' class = "row" >
+              <div class="alert alert-danger col-md-offset-3 col-md-6" style='display:inline-block;'>
+                <p><strong>You are currently operating on the Ropsten testnet.</strong></p>
+                <p>To interact with a real contract, change your Metamask network to the "Main" Ethereum network, and refresh.</p>
+              </div>
+            </div>
+        </div>
+        <div class="header" >
+            <div class="title" align='center' ><h1 >Dapp title goes here :)</h1></div>
+        </div>
+        <div id="mainVue">
+            <div class="mainBlock balances">
+                <div class="well well-sm row">
+                    <div class="col-md-6">
+                        <div>Your address</div>
+                        <div id='userAddress'></div>
+                    </div>
+                    <div class="col-md-6">
+                        <div>Your balance</div>
+                        <div id='userBalance'></div>
+                    </div>
+                </div>
+            </div>
+            <div class="mainBlock eventList">
+              <div class="row well well-sm">
+                <div class="col-md-12 eventLog scrollBar">
+                      <event-row v-for="event in events" :event="event"></event-row>
+                </div>
+              </div>
+            </div>
+        </div>
+  </div>
+  </body>
+</html>

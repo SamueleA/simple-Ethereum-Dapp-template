@@ -44,11 +44,11 @@
                 <div class="well well-sm row">
                     <div class="col-md-6">
                         <div>Your address</div>
-                        <div id='userAddress'></div>
+                        <eth-address-output :shorten-to=10 :address='userAddress'>
                     </div>
                     <div class="col-md-6">
                         <div>Your balance</div>
-                        <div id='userBalance'></div>
+                        <ether-output :wei='userBalance'></ether-output>
                     </div>
                 </div>
             </div>

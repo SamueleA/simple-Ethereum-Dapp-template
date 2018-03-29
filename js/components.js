@@ -52,7 +52,7 @@ Vue.component('eth-address-output', {
     },
     formattedAddress: function() {
       if (this.shortenTo <42) {
-        return this.address.substring(0, this.shortenTo) + "...";
+        return this.address.toString().substring(0, this.shortenTo) + "...";
       } else {
         return this.address;
       }
@@ -128,14 +128,12 @@ Vue.component('ether-output', {
           var web3 = new Web3();
       }
       var ether = web3.fromWei(this.wei, "ether");
-      if (this.wei.toString().length > 12)
-          return ether + " Ether";
-      else if (this.wei.toString().length > 6)
-          return ether * 1000000000 + " Gwei";
-      else if (this.wei.toString().length > 1)
+      if (ether < 0.000000000001)
           return this.wei.toString() + " wei";
+      else if (ether < 0.000001)
+          return (ether * 1000000000) + " Gwei";
       else
-          return this.wei.toString() + " Ether";
+          return ether + " Ether";
     }
   },
   template: "<span>{{formatted}}</span>"

@@ -15,7 +15,9 @@ var loadScrollbar = false;
   var vueInstance = new Vue({
     el:'#mainVue',
     data:{
-      events: []
+      events: [],
+      userAddress: 0,
+      userBalance: 0
     },
     updated: function() {
       $('[data-toggle="popover"]')
@@ -48,12 +50,9 @@ var loadScrollbar = false;
 
   window.addEventListener("contracts_loaded", () =>{
     //user info
-    var userAddress = web3.eth.accounts[0];
-    var userBalance;
-    web3.eth.getBalance(web3.eth.accounts[0], (err, res) =>{
-      userBalance = web3.fromWei(res.toNumber(), 'ether');
-      $('#userAddress').text(userAddress);
-      $('#userBalance').text(userBalance);
+    vueInstance.userAddress = web3.eth.accounts[0];
+    web3.eth.getBalance(vueInstance.userAddress , (err, res) =>{
+      vueInstance.userBalance = res;
     });
 
     ///fetching the events
